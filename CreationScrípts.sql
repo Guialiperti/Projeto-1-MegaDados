@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`usuario_ve_post` (
   `id_usuario` INT NOT NULL,
   `id_post` INT NOT NULL,
   `browser` VARCHAR(32) NOT NULL,
+  'ip' VARCHAR(32) NOT NULL,
   `momento_visto` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `aparelho` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_usuario`, `id_post`),
