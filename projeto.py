@@ -100,7 +100,7 @@ def marca_usuario(conn, id_post, id_usuario):
         try:
             cursor.execute('INSERT INTO post_menciona_usuario (id_post, id_usuario) VALUES (%s, %s)', (id_post, id_usuario))
         except pymysql.err.IntegrityError as e:
-            raise ValueError(f'Não posso marcar o usuario de id: {id_usuario} no post de id: {post_id} na tabela post_menciona_usuario')
+            raise ValueError(f'Não posso marcar o usuario de id: {id_usuario} no post de id: {id_post} na tabela post_menciona_usuario')
 
 
 #Funcoes da tabela usuario_prefere_passaro
