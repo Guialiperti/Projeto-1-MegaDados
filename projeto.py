@@ -11,7 +11,7 @@ def adiciona_usuario(conn, nome, email, cidade):
 
 def acha_usuario(conn, nome):
     with conn.cursor() as cursor:
-        cursor.execute('SELECT nome FROM usuario WHERE nome = %s', (nome))
+        cursor.execute('SELECT id FROM usuario WHERE nome = %s', (nome))
         res = cursor.fetchone()
         if res:
             return res[0]
@@ -41,16 +41,16 @@ def lista_usuarios(conn):
 
 #Funcoes tabela POST
 
-def adiciona_post(conn, titulo, texto, url, visivel, id_usuario):
+def adiciona_post(conn, titulo, texto, url, visivel, ip, id_usuario):
     with conn.cursor() as cursor:
         try:
-            cursor.execute('INSERT INTO post (titulo, texto, url, visivel, id_usuario) VALUES (%s, %s, %s, %s)', (titulo, texto, url, visivel, id_usuario))
+            cursor.execute('INSERT INTO post (titulo, texto, url, visivel, ip, id_usuario) VALUES (%s, %s, %s, %s, %s)', (titulo, texto, url, visivel, ip, id_usuario))
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso inserir o post com titulo: {titulo} na tabela post')
 
-def acha_post(conn, id_post):
+def acha_post(conn, titulo):
     with conn.cursor() as cursor:
-        cursor.execute('SELECT id FROM post WHERE id_post = %s', (id_post))
+        cursor.execute('SELECT id FROM post WHERE titulo = %s', (titulo))
         res = cursor.fetchone()
         if res:
             return res[0]
