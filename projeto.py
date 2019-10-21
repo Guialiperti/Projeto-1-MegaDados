@@ -111,3 +111,36 @@ def cria_preferencia(conn, id_usuario, especie_passaro):
             cursor.execute('INSERT INTO usuario_prefere_passaro (id_usuario, especie_passaro) VALUES (%s, %s)', (id_usuario, especie_passaro))
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso adicionar a preferencia do usuario de id: {id_usuario} ao passaro: {especie_passaro} na tabela usuario_prefere_passaro')
+
+
+#Funcao da tabela Joinha
+
+def adiciona_reacao(conn, id_usuario, id_post, reacao):
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute('INSERT INTO JoinhaPost (id_usuario, id_post, reacao) VALUES (%s, %s, %s)', (id_usuario, id_post, reacao))
+        except pymysql.err.IntegrityError as e:
+            raise ValueError(f'Não posso reagir. usuario: {id_usuario}, post: {id_post} na tabela JoinhaPost')
+
+def acha_reacao_post(conn, id_usuario, id_post):
+	with conn.cursor() as cursor:
+		cursor.execute('SELECT reacao FROM JoinhaPost WHERE id_post = %s', (id_post))
+		res = cursor.fetchone()
+		if res:
+			return res[0]
+		else:
+			return None
+
+def remove_reacao(conn, id_usuario, id_post):
+	with conn.cursor() as cursor:
+		try:
+			cursor.execute('DELETE FROM JoinhaPost WHERE id_usuario=%s AND id_post=%s', (id_usuario, id_post))
+		except pymysql.err.IntegrityError as e:
+			raise ValueError(f'Não posso remover a reacao do usuario de id: {id_usuario} no post de id: {id_post} da tabela JoinhaPost')
+
+def atualiza_reacao(conn, id_usuario, id_post, reacao):
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute('UPDATE JoinhaPost SET reacao=%s WHERE id_usuario=%s AND id_post=%s', (reacao, id_usuario, id_post))
+        except pymysql.err.IntegrityError as e:
+            raise ValueError(f'Não posso atualizar a reacao do usuario de id: {id_usuario} no post de id: {id_post} da tabela JoinhaPost')

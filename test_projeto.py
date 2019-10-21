@@ -131,7 +131,7 @@ class TestProjeto(unittest.TestCase):
         especie_passaro = 'pombo'
 
         id_usuario = acha_usuario(conn, usuario)
-        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        adiciona_post(conn, titulo, texto, url, visivel, ip, id_usuario)
 
         id_post = acha_post_ativo(conn, id_post)
         self.assertIsNotNone(id_post)
@@ -156,13 +156,43 @@ class TestProjeto(unittest.TestCase):
         nome = 'Guilherme Aliperti'
         url = 'https://insper.edu.br'
         visivel = '1'
+        ip = '10.2.3'
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
 
         id_usuario = acha_usuario(conn, nome)
-        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        adiciona_post(conn, titulo, texto, url, visivel, ip, id_usuario)
 
         id_post = acha_post_ativo(conn, id_post)
         self.assertIsNotNone(id_post)
 
         marca_usuario(conn, id_post, id_usuario)
+
+def run_sql_script(filename):
+    global config
+    with open(filename, 'rb') as f:
+        subprocess.run(
+            [
+                config['MYSQL'], 
+                '-u', config['USER'], 
+                '-p' + config['PASS'], 
+                '-h', config['HOST']
+            ], 
+            stdin=f
+        )
+
+def setUpModule():
+    filenames = [entry for entry in os.listdir() 
+        if os.path.isfile(entry) and re.match(r'.*_\d{3}\.sql', entry)]
+    for filename in filenames:
+        run_sql_script(filename)
+
+def tearDownModule():
+    run_sql_script('deltaScriptEntrega2.sql')
+
+if __name__ == '__main__':
+    global config
+    with open('config_tests.json', 'r') as f:
+        config = json.load(f)
+    logging.basicConfig(filename=config['LOGFILE'], level=logging.DEBUG)
+    unittest.main(verbosity=2)
