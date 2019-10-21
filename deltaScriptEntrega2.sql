@@ -20,9 +20,9 @@ CREATE TABLE posts (
   url VARCHAR(32),
   visivel TINYINT NOT NULL,
   data_post TIMESTAMP NOT NULL,
-  id_usuario_post INT NULL,
+  id_usuario INT NULL,
   PRIMARY KEY (id_post),
-  FOREIGN KEY (id_usuario_post)
+  FOREIGN KEY (id_usuario)
     REFERENCES usuarios(id_usuario)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
@@ -96,7 +96,7 @@ DROP TABLE IF EXISTS JoinhaPost;
 CREATE TABLE JoinhaPost(
 id_usuario int NOT NULL,
 id_post int NOT NULL,
-tipoReacao VARCHAR(30),
+reacao VARCHAR(30),
   PRIMARY KEY (id_usuario,id_post),
   FOREIGN KEY (id_usuario)
     REFERENCES usuarios(id_usuario),
