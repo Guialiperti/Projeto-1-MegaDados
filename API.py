@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 import pymysql
-from mg import *
+from funcoes import *
 
 connection_options = {
     'host': 'localhost',
@@ -37,14 +37,29 @@ def popularusers(cidade: str):
 @app.post("/referenceusers")
 def refereceuser(id_usuario: int):
     result = usuarios_que_referenciam(connection, id_usuario)
-    return("Users":result)
+    return{"Users":result}
 
-@app.post("/url)
+@app.post("/url")
 def urlpassaors():
     result = URL_passaros(connection)
-    return("URL":result)
+    return{"URL":result}
 
 @app.post("/aparelhobrowser")
 def aparelhobrowser():
     result = quantidade_aparelho_browser(connection)
-    return("Aparelhos":result)
+    return{"Aparelhos":result}
+
+@app.post("/adicionareacao")
+def addreaction(id_usuario: int, id_post: int, reacao:str):
+    adiciona_reacao(connection, id_usuario, id_post, reacao)
+    return{"Message":"done"}
+
+@app.post("/removereacao")
+def removereaction(id_usuario: int, id_post: int):
+    remove_reacao(connection, id_usuario, id_post)
+    return{"Message":"done"}
+
+@app.post("/atualizareacao")
+def updatereaction(id_usuario: int, id_post: int, reacao:str):
+    atualiza_reacao(connection, id_usuario, id_post)
+    return{"Message":"done"}
