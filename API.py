@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 import pymysql
-from funcoes import *
+from projeto import *
 
 connection_options = {
     'host': 'localhost',
@@ -15,8 +15,8 @@ connection = pymysql.connect(**connection_options)
 app=FastAPI()
 
 @app.post("/addpost")
-def addpost(titulo: str, texto: str, url:str, id_usuario:int):
-    adiciona_post(connection, titulo, texto, url)
+def addpost(titulo: str, texto: str, url:str, visivel: int, id_usuario:int):
+    adiciona_post(connection, titulo, texto, url, visivel, id_usuario)
     return{"Message":"done"}
 
 @app.post("/removepost")
@@ -61,5 +61,5 @@ def removereaction(id_usuario: int, id_post: int):
 
 @app.post("/atualizareacao")
 def updatereaction(id_usuario: int, id_post: int, reacao:str):
-    atualiza_reacao(connection, id_usuario, id_post)
+    atualiza_reacao(connection, id_usuario, id_post, reacao)
     return{"Message":"done"}
