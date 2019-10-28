@@ -1,4 +1,7 @@
 DELIMITER //
+DROP PROCEDURE IF EXISTS marca_passaro;
+DROP PROCEDURE IF EXISTS marca_usuario;
+
 CREATE PROCEDURE marca_usuario(IN nome_usuario VARCHAR(32), IN post INT)
 BEGIN
 	IF EXISTS (SELECT id_usuario FROM usuarios WHERE nome = nome_usuario) THEN

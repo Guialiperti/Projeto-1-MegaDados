@@ -198,8 +198,8 @@ def usuarios_que_referenciam(conn,id_usuario):
 					FROM
 						posts, post_menciona_usuario
 					WHERE 
-						posts.id_post = post_menciona_usuario.id_post AND post_menciona_usuario.id_usuario = id_usuario
-				""")
+						posts.id_post = post_menciona_usuario.id_post AND post_menciona_usuario.id_usuario = %s
+				""",(id_usuario))
 			r = cursor.fetchall()
 			if len(r) == 0 :
 				return None
