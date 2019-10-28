@@ -285,6 +285,39 @@ class TestProjeto(unittest.TestCase):
         pop = usuarios_mais_populares(conn, cidade)
         self.assertEqual(nome2, pop)
 
+    def testa_url_passaro(self):
+        conn = self.__class__.connection
+
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        nome2 = 'Nicolas Stegmann'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo2 = 'depois'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        especie_passaro = 'pombo'
+
+        adiciona_passaro(conn, especie_passaro)
+        adiciona_usuario(conn, nome, email, cidade)
+        id_usuario = acha_usuario(conn, nome)
+
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        id_post = acha_post(conn, titulo)
+
+        menciona_passaro(conn, id_post, especie_passaro)
+        lista = URL_passaros(conn)
+        self.assertIsNotNone(lista)
+
+
+
+
+
+
 
         
 
