@@ -283,7 +283,9 @@ class TestProjeto(unittest.TestCase):
         marca_usuario(conn, id_post, id_usuario2)
 
         pop = usuarios_mais_populares(conn, cidade)
-        self.assertIsNotNone(pop)
+        self.assertEqual(nome2, pop)
+
+
 
 
         
