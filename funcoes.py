@@ -15,7 +15,7 @@ def marcacoes(texto):
 def marca_passaro(conn,especie_passaro,id_post):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('CALL marca_passaro(%s, %s)', (especie_passaro, id_post))
+			cursor.execute('CALL marca_passaro(%s, %i)', (especie_passaro, id_post))
 		except pymysql.err.IntegrityError as e:
 			raise ValueError(f'Não posso marcar o passaro de nome: {especie_passaro} no post de id: {id_post}')
 
@@ -23,7 +23,7 @@ def marca_passaro(conn,especie_passaro,id_post):
 def marca_usuario(conn, nome_usuario, id_post):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('CALL marca_usuario(%s, %s)', (nome_usuario, id_post))
+			cursor.execute('CALL marca_usuario(%s, %i)', (nome_usuario, id_post))
 		except pymysql.err.IntegrityError as e:
 			raise ValueError(f'Não posso adicionar marcar o usuario de nome: {nome_usuario} no post de id: {id_post}')
 
@@ -32,7 +32,7 @@ def adiciona_post(conn, titulo, texto, url, visivel, id_usuario):
 	p,u = marcacoes(texto)
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('INSERT INTO post (titulo, texto, url, visivel, id_usuario) VALUES (%s, %s, %s, %s)', (titulo, texto, url, visivel, id_usuario))
+			cursor.execute('INSERT INTO post (titulo, texto, url, visivel, id_usuario) VALUES (%s, %s, %s, %i)', (titulo, texto, url, visivel, id_usuario))
 			cursor.execute('SELECT id_post FROM posts WHERE id_post = LAST_INSERT_ID() LIMIT 1')
 			r = cursor.fetchone()
 			for i in p:
@@ -53,18 +53,7 @@ def remove_post(conn, id_post):
 def posts_usuario_ordem_cronologica_reversa(conn, id_usuario):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute(
-			"""
-				SELECT
-					texto
-				FROM
-					posts
-				WHERE
-					id_usuario=%s
-				ORDER BY 
-					data_post ASC 
-				LIMIT by 5
-			""", (id_usuario))
+			cursor.execute('SELECT texto FROM posts WHERE id_usuario=%s ORDER BY data_post ASC LIMIT by 5', (id_usuario))
 			r = cursor.fetchone()
 			return r[0]
 		except pymysql.err.IntegrityError as e:
@@ -104,8 +93,8 @@ def usuarios_que_referenciam(conn,id_usuario):
 					FROM
 						posts, post_menciona_usuario
 					WHERE 
-						posts.id_post = post_menciona_usuario.id_post AND post_menciona_usuario.id_usuario = id_usuario;
-				""",)
+						posts.id_post = post_menciona_usuario.id_post AND post_menciona_usuario.id_usuario = id_usuario
+				""")
 			r = cursor.fetchall()
 			if len(r) == 0 :
 				return None
@@ -126,8 +115,8 @@ def URL_passaros(conn):
 					FROM
 						passaro, posts, post_menciona_passaro
 					WHERE 
-						passaro.especie = post_menciona_passaro.especie_passaro AND post_menciona_passaro.id_post = posts.id_post;
-				""",)
+						passaro.especie = post_menciona_passaro.especie_passaro AND post_menciona_passaro.id_post = posts.id_post
+				""")
 			r = cursor.fetchall()
 			if len(r) == 0 :
 				return None
@@ -146,8 +135,8 @@ def quantidade_aparelho_browser(conn):
 					FROM
 						posts
 					GROUP BY 
-						browser,aparelho;
-				""",)
+						browser,aparelho
+				""")
 			r = cursor.fetchall()
 			if len(r) == 0 :
 				return None
@@ -159,13 +148,13 @@ def quantidade_aparelho_browser(conn):
 def adiciona_reacao(conn, id_usuario, id_post, reacao):
     with conn.cursor() as cursor:
         try:
-            cursor.execute('INSERT INTO JoinhaPost (id_usuario, id_post, reacao) VALUES (%s, %s, %s)', (id_usuario, id_post, reacao))
+            cursor.execute('INSERT INTO JoinhaPost (id_usuario, id_post, reacao) VALUES (%i, %i, %s)', (id_usuario, id_post, reacao))
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso reagir. usuario: {id_usuario}, post: {id_post} na tabela JoinhaPost')
 
 def acha_reacao_post(conn, id_usuario, id_post):
 	with conn.cursor() as cursor:
-		cursor.execute('SELECT reacao FROM JoinhaPost WHERE id_post = %s', (id_post))
+		cursor.execute('SELECT reacao FROM JoinhaPost WHERE id_post = %i', (id_post))
 		res = cursor.fetchone()
 		if res:
 			return res[0]
@@ -175,13 +164,13 @@ def acha_reacao_post(conn, id_usuario, id_post):
 def remove_reacao(conn, id_usuario, id_post):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('DELETE FROM JoinhaPost WHERE id_usuario=%s AND id_post=%s', (id_usuario, id_post))
+			cursor.execute('DELETE FROM JoinhaPost WHERE id_usuario=%i AND id_post=%i', (id_usuario, id_post))
 		except pymysql.err.IntegrityError as e:
 			raise ValueError(f'Não posso remover a reacao do usuario de id: {id_usuario} no post de id: {id_post} da tabela JoinhaPost')
 
 def atualiza_reacao(conn, id_usuario, id_post, reacao):
     with conn.cursor() as cursor:
         try:
-            cursor.execute('UPDATE JoinhaPost SET reacao=%s WHERE id_usuario=%s AND id_post=%s', (reacao, id_usuario, id_post))
+            cursor.execute('UPDATE JoinhaPost SET reacao=%s WHERE id_usuario=%i AND id_post=%i', (reacao, id_usuario, id_post))
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso atualizar a reacao do usuario de id: {id_usuario} no post de id: {id_post} da tabela JoinhaPost')
