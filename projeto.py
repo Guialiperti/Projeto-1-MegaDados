@@ -240,7 +240,7 @@ def quantidade_aparelho_browser(conn):
 					FROM
 						usuario_ve_post
 					GROUP BY 
-						browser,aparelho
+						aparelho
 				""")
 			r = cursor.fetchall()
 			if len(r) == 0 :
