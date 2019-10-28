@@ -8,6 +8,7 @@ import subprocess
 import unittest
 import pymysql
 
+from funcoes import *
 from projeto import *
 
 class TestProjeto(unittest.TestCase):
@@ -231,6 +232,35 @@ class TestProjeto(unittest.TestCase):
         atualiza_reacao(conn, id_usuario, id_post, 'Love')
         reacao = acha_reacao_post(conn, id_usuario, id_post)
         self.assertEqual('Love', reacao)
+
+    def testa_funcao_post_cronologica_reversa(self):
+        conn = self.__class__.connection
+
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo2 = 'depois'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+
+        adiciona_usuario(conn, nome, email, cidade)
+        id_usuario = acha_usuario(conn, nome)
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        id_post1 = acha_post(conn, titulo)
+
+        adiciona_post(conn, titulo2, texto, url, visivel, id_usuario)
+        id_buscado = posts_usuario_ordem_cronologica_reversa(conn, id_usuario)
+        self.assertEqual(id_post1, id_buscado)
+        
+    # def testa_usuario_popular(self):
+    #     conn = self.__class__.connection
+
+    #     titulo
 
 
 def run_sql_script(filename):
