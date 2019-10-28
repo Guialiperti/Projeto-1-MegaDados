@@ -380,13 +380,13 @@ class TestProjeto(unittest.TestCase):
 
         adiciona_post(conn, titulo2, texto, url, visivel, id_usu1)
         id_post1 = acha_post(conn, titulo2)
-        l_id.append(id_post1)
+        l_id.append(id_usu2)
         marca_usuario(conn, id_post1, id_referenciado)
 
 
         adiciona_post(conn, titulo3, texto, url, visivel, id_usu2)
         id_post2 = acha_post(conn, titulo3)
-        l_id.append(id_post2)
+        l_id.append(id_usu1)
         marca_usuario(conn, id_post2, id_referenciado)
 
         l_referenciados = usuarios_que_referenciam(conn, id_referenciado)
@@ -397,6 +397,8 @@ class TestProjeto(unittest.TestCase):
         
         else:
             self.assertEqual('2','1')
+
+
 
 
 
