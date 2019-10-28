@@ -367,10 +367,10 @@ class TestProjeto(unittest.TestCase):
         func_return = quantidade_aparelho_browser(conn)
         
         if (mat == func_return):
-            self.assertIsEqual('1', '1')
+            self.assertEqual('1', '1')
 
         else:
-            self.assertIsEqual('1','2')
+            self.assertEqual('1','2')
 
         
 
