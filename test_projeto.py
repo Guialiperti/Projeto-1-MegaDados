@@ -361,14 +361,14 @@ class TestProjeto(unittest.TestCase):
         adiciona_usuario(conn, nome3, email, cidade)
         id_usu2 = acha_usuario(conn, nome3)
 
-        adiciona_post(conn, titulo, texto, url, visivel, id_usu1)
+        adiciona_post(conn, titulo2, texto, url, visivel, id_usu1)
         id_post1 = acha_post(conn, titulo2)
         l_id.append(id_post1)
         marca_usuario(conn, id_post1, id_referenciado)
 
 
-        adiciona_post(conn, titulo2, texto, url, visivel, id_usu2)
-        id_post2 = acha_post(conn, titulo2)
+        adiciona_post(conn, titulo3, texto, url, visivel, id_usu2)
+        id_post2 = acha_post(conn, titulo3)
         l_id.append(id_post2)
         marca_usuario(conn, id_post2, id_referenciado)
 
