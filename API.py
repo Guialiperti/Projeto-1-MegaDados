@@ -5,9 +5,9 @@ from funcoes import *
 
 connection_options = {
     'host': 'localhost',
-    'user': 'megadados',
-    'password': 'megadados2019',
-    'database': 'rede'
+    'user': 'root',
+    'password': 'Megadados123',
+    'database': 'REDE'
 }
 
 connection = pymysql.connect(**connection_options)

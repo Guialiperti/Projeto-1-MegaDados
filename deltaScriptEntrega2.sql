@@ -5,10 +5,11 @@ USE REDE;
 DROP TABLE IF EXISTS usuarios ;
 CREATE TABLE usuarios (
   id_usuario INT NOT NULL AUTO_INCREMENT,
-  nome VARCHAR(32) NOT NULL,
+  nome VARCHAR(32) NOT NULL UNIQUE,
   email VARCHAR(32) NOT NULL,
   cidade VARCHAR(32) NOT NULL,
-  PRIMARY KEY (id_usuario)
+  PRIMARY KEY (id_usuario),
+  UNIQUE(nome)
 );
 
 
@@ -19,7 +20,7 @@ CREATE TABLE posts (
   texto VARCHAR(32),
   url VARCHAR(32),
   visivel TINYINT NOT NULL,
-  data_post TIMESTAMP NOT NULL,
+  data_post TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_usuario INT NULL,
   PRIMARY KEY (id_post),
   FOREIGN KEY (id_usuario)
@@ -69,7 +70,7 @@ DROP TABLE IF EXISTS post_menciona_usuario ;
 CREATE TABLE post_menciona_usuario (
   id_post INT NOT NULL,
   id_usuario INT NOT NULL,
-  mencao TINYINT NOT NULL,
+  mencao TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (id_post, id_usuario),
   FOREIGN KEY (id_post)
     REFERENCES posts (id_post),
@@ -83,7 +84,7 @@ DROP TABLE IF EXISTS post_menciona_passaro;
 CREATE TABLE post_menciona_passaro (
   especie_passaro VARCHAR(32) NOT NULL,
   id_post INT NOT NULL,
-  mencao TINYINT NOT NULL,
+  mencao TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (especie_passaro, id_post),
   FOREIGN KEY (especie_passaro)
     REFERENCES passaros (especie),

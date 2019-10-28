@@ -1,7 +1,7 @@
 {
-    "MYSQL": "C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysql",
-    "HOST": "127.0.0.1",
-    "USER": "megadados",
+    "MYSQL": "/Applications/MySQLWorkbench.app/Contents/MacOS",
+    "HOST": "localhost",
+    "USER": "root",
     "PASS": "Megadados123",
     "LOGFILE": "log.txt"
 }

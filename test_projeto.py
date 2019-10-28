@@ -18,7 +18,7 @@ class TestProjeto(unittest.TestCase):
             host=config['HOST'],
             user=config['USER'],
             password=config['PASS'],
-            database='mydb'
+            database='REDE'
         )
     @classmethod
     def tearDownClass(cls):
@@ -72,27 +72,26 @@ class TestProjeto(unittest.TestCase):
         cidade = 'Sao Paulo'
 
         adiciona_usuario(conn, nome, email, cidade)
-        id = acha_usuario(conn, nome)
 
-        res = lista_usuarios(conn)
-        self.assertCountEqual(res, (id,))
+        id_usuario = acha_usuario(conn, nome)
+        remove_usuario(conn, id_usuario)
 
-        remove_usuario(conn, nome)
-
-        res = lista_usuarios(conn)
-        self.assertFalse(res)
+        id_usuario = acha_usuario(conn, nome)
+        self.assertIsNone(id_usuario)
 
     def test_adiciona_preferencia(self):
         conn = self.__class__.connection
 
         nome = 'Guilherme Aliperti'
         email = 'gui.aliperti9@gmail.com'
-        cidade = "Sao Paulo"
+        cidade = 'Sao Paulo'
         especie_passaro = 'pombo'
 
         adiciona_usuario(conn, nome, email, cidade)
 
-        cria_preferencia(conn, email, especie_passaro)
+        adiciona_passaro(conn, especie_passaro)
+        id_usuario = acha_usuario(conn, nome)
+        cria_preferencia(conn, id_usuario, especie_passaro)
 
     def test_adiciona_post(self):
         conn = self.__class__.connection
@@ -101,13 +100,17 @@ class TestProjeto(unittest.TestCase):
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
         nome = 'Guilherme Aliperti'
+        ip = '44.2.45'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
         url = 'https://insper.edu.br'
         visivel = '1'
-
+        
+        adiciona_usuario(conn, nome, email, cidade)
         id_usuario = acha_usuario(conn, nome)
         adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
 
-        id_post = acha_post_ativo(conn, id_post)
+        id_post = acha_post_ativo(conn, titulo)
         self.assertIsNotNone(id_post)
 
         id = acha_post_ativo(conn, 123)
@@ -118,29 +121,35 @@ class TestProjeto(unittest.TestCase):
 
         usuario = 'Guilherme Aliperti'
         usuario_marcado = 'Nicolas Stegmann'
+        email_usuario = 'gg@gmail.com'
         usuario_vizualizacao = 'Gabriel Moura'
         url = 'https://insper.edu.br'
         aparelho = 'android'
         browser = 'firefox'
-        ip = '200.108.175.255'
         id_post = '1'
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
-        url = 'https://insper.edu.br'
         visivel = '1'
+        ip = '1.2.3.4'
+        cidade = 'Sao Paulo'
         especie_passaro = 'pombo'
 
         id_usuario = acha_usuario(conn, usuario)
-        adiciona_post(conn, titulo, texto, url, visivel, ip, id_usuario)
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
 
-        id_post = acha_post_ativo(conn, id_post)
+        id_post = acha_post_ativo(conn, titulo)
         self.assertIsNotNone(id_post)
 
+        adiciona_passaro(conn, especie_passaro)
         menciona_passaro(conn, id_post, especie_passaro)
 
-        marca_usuario(conn, id_post, usuario_marcado)
+        adiciona_usuario(conn, usuario_marcado, email_usuario, cidade)
+        id_usuario = acha_usuario(conn, usuario_marcado)
+        marca_usuario(conn, id_post, id_usuario)
 
-        usuario_ve_post(conn, usuario_vizualizacao, id_post,
+        adiciona_usuario(conn, usuario_vizualizacao, email_usuario, cidade)
+        id_usuario = acha_usuario(conn, usuario_vizualizacao)
+        usuario_ve_post(conn, id_usuario, id_post,
                        aparelho, browser, ip)
 
         remove_post(conn, id_post)
@@ -157,16 +166,76 @@ class TestProjeto(unittest.TestCase):
         url = 'https://insper.edu.br'
         visivel = '1'
         ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
-
+        
+        adiciona_usuario(conn, nome, email, cidade)
         id_usuario = acha_usuario(conn, nome)
-        adiciona_post(conn, titulo, texto, url, visivel, ip, id_usuario)
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
 
-        id_post = acha_post_ativo(conn, id_post)
+        id_post = acha_post_ativo(conn, titulo)
         self.assertIsNotNone(id_post)
 
         marca_usuario(conn, id_post, id_usuario)
+
+    def teste_adiciona_reacao(self):
+        conn = self.__class__.connection
+
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+
+        adiciona_usuario(conn, nome, email, cidade)
+        id_usuario = acha_usuario(conn, nome)
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        id_post = acha_post(conn, titulo)
+
+        adiciona_reacao(conn, id_usuario, id_post, 'joinha')
+
+        reacao = acha_reacao_post(conn, id_usuario, id_post)
+        self.assertIsNotNone(reacao)
+
+    def teste_altera_reacao(self):
+        conn = self.__class__.connection
+
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+
+        adiciona_usuario(conn, nome, email, cidade)
+        id_usuario = acha_usuario(conn, nome)
+        adiciona_post(conn, titulo, texto, url, visivel, id_usuario)
+        id_post = acha_post(conn, titulo)
+
+        adiciona_reacao(conn, id_usuario, id_post, 'joinha')
+
+        reacao = acha_reacao_post(conn, id_usuario, id_post)
+        self.assertIsNotNone(reacao)
+
+        atualiza_reacao(conn, id_usuario, id_post, 'Love')
+        reacao = acha_reacao_post(conn, id_usuario, id_post)
+        self.assertEqual('Love', reacao)
+
+        
+
+
+        
 
 def run_sql_script(filename):
     global config
@@ -189,6 +258,8 @@ def setUpModule():
 
 def tearDownModule():
     run_sql_script('deltaScriptEntrega2.sql')
+    run_sql_script('trigger.sql')
+    run_sql_script('store_procedures.sql')
 
 if __name__ == '__main__':
     global config
