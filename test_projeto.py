@@ -286,8 +286,6 @@ class TestProjeto(unittest.TestCase):
         self.assertEqual(nome2, pop)
 
 
-
-
         
 
 
