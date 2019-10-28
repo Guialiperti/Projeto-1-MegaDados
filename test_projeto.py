@@ -141,6 +141,7 @@ class TestProjeto(unittest.TestCase):
         self.assertIsNotNone(id_post)
 
         adiciona_passaro(conn, especie_passaro)
+        id_post = acha_post(conn, titulo)
         menciona_passaro(conn, id_post, especie_passaro)
 
         adiciona_usuario(conn, usuario_marcado, email_usuario, cidade)
@@ -151,6 +152,8 @@ class TestProjeto(unittest.TestCase):
         id_usuario = acha_usuario(conn, usuario_vizualizacao)
         usuario_ve_post(conn, id_usuario, id_post,
                        aparelho, browser, ip)
+
+        
 
         remove_post(conn, id_post)
         id = acha_post_ativo(conn, id_post)
@@ -320,33 +323,37 @@ class TestProjeto(unittest.TestCase):
         texto = 'Bla bla bla passaros sao legais'
         nome = 'Guilherme Aliperti'
         nome2 = 'Nicolas Stegmann'
-        nome3 = "Gabriel Moura"
         url = 'https://insper.edu.br'
         visivel = '1'
         ip = '10.2.3'
         email = 'guirin@gmail.com'
         cidade = 'SP'
         titulo2 = 'depois'
-        titulo3 = 'depoisdepois'
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
         especie_passaro = 'pombo'
         aparelho1 = "samsung"
         aparelho2 = "apple"
-        aparelho3 = "apple"
         browser1 = "firefox"
         browser2 = "chrome"
-        browser3 = "safari"
+        lista_1 = []
+        lista_2 = []
+
 
 
         adiciona_usuario(conn, nome, email, cidade)
         id_usu1 = acha_usuario(conn, nome)
+        lista_1.append(browser1)
+        lista_2.append(browser2)
+        lista_1.append(aparelho1)
+        lista_2.append(aparelho2)
+        lista_1.append('1')
+        lista_2.append('1')
+
+        mat = [lista_1, lista_2]
 
         adiciona_usuario(conn, nome2, email, cidade)
         id_usu2 = acha_usuario(conn, nome2)
-
-        adiciona_usuario(conn, nome3, email, cidade)
-        id_usu3 = acha_usuario(conn, nome3)
 
         adiciona_post(conn, titulo, texto, url, visivel, id_usu1)
         id_post1 = acha_post(conn, titulo)
@@ -356,10 +363,18 @@ class TestProjeto(unittest.TestCase):
 
         usuario_ve_post(conn, id_usu1, id_post1, aparelho1, browser1, ip)
         usuario_ve_post(conn, id_usu2, id_post2, aparelho2, browser2, ip)
-        usuario_ve_post(conn, id_usu3, id_post3, aparelho3, browser3, ip)
+        
+        func_return = quantidade_aparelho_browser(conn)
+        
+        if (mat == func_return):
+            self.assertIsEqual('1', '1')
 
-        mx = quantidade_aparelho_browser(conn)
-        print(mx)
+        else:
+            self.assertIsEqual('1','2')
+
+        
+
+
         
 
 
