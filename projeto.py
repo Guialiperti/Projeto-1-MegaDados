@@ -172,7 +172,7 @@ def usuarios_mais_populares(conn, cidade):
 			cursor.execute(
 			"""
 				SELECT
-					usuarios, COUNT(id_usuario) AS nvezes
+					nome, COUNT(id_usuario) AS nvezes
 				FROM
 					usuarios
 					INNER JOIN post_menciona_usuario USING (id_usuario)
@@ -180,7 +180,6 @@ def usuarios_mais_populares(conn, cidade):
 				cidade=%s
 				ORDER BY
 					nvezes DESC
-				LIMIT by 5
 			
 			""", (cidade))
 			r= cursor.fetchone()
