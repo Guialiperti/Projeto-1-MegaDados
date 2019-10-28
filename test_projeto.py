@@ -329,6 +329,10 @@ class TestProjeto(unittest.TestCase):
         titulo = 'Passaromaniaco'
         texto = 'Bla bla bla passaros sao legais'
         especie_passaro = 'pombo'
+        aparelho1 = "samsung"
+        aparelho2 = "apple"
+        browser1 = "firefox"
+        browser2 = "chrome"
 
 
         adiciona_usuario(conn, nome, email, cidade)
@@ -344,6 +348,11 @@ class TestProjeto(unittest.TestCase):
         id_post2 = acha_post(conn, titulo2)
 
         usuario_ve_post(conn, id_usu1, id_post1, aparelho1, browser1, ip)
+        usuario_ve_post(conn, id_usu2, id_post2, aparelho2, browser2, ip)
+
+        mx = quantidade_aparelho_browser(conn)
+        print(mx)
+        
 
 
 
