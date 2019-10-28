@@ -1,7 +1,7 @@
 {
     "MYSQL": "/Applications/MySQLWorkbench.app/Contents/MacOS",
     "HOST": "localhost",
-    "USER": "root",
-    "PASS": "Megadados123",
+    "USER": "megadados",
+    "PASS": "ayres",
     "LOGFILE": "log.txt"
 }

@@ -159,7 +159,7 @@ def adiciona_passaro(conn, especie):
 def posts_usuario_ordem_cronologica_reversa(conn, id_usuario):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('SELECT id_usuario FROM posts WHERE id_usuario=%s ORDER BY data_post ASC LIMIT by 5', (id_usuario))
+			cursor.execute('SELECT id_post FROM posts WHERE id_usuario=%s ORDER BY data_post DESC', (id_usuario))
 			r = cursor.fetchone()
 			return r[0]
 		except pymysql.err.IntegrityError as e:
@@ -172,7 +172,7 @@ def usuarios_mais_populares(conn, cidade):
 			cursor.execute(
 			"""
 				SELECT
-					usuarios, COUNT(id_usuario) AS nvezes
+					nome, COUNT(id_usuario) AS nvezes
 				FROM
 					usuarios
 					INNER JOIN post_menciona_usuario USING (id_usuario)
@@ -180,7 +180,6 @@ def usuarios_mais_populares(conn, cidade):
 				cidade=%s
 				ORDER BY
 					nvezes DESC
-				LIMIT by 5
 			
 			""", (cidade))
 			r= cursor.fetchone()
