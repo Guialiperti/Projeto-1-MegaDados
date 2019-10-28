@@ -216,11 +216,11 @@ def URL_passaros(conn):
 			cursor.execute(
 				"""
 					SELECT
-						passaro.especie, post.Url
+						passaros.especie, posts.url
 					FROM
-						passaro, posts, post_menciona_passaro
+						passaros, posts, post_menciona_passaro
 					WHERE 
-						passaro.especie = post_menciona_passaro.especie_passaro AND post_menciona_passaro.id_post = posts.id_post
+						passaros.especie = post_menciona_passaro.especie_passaro AND post_menciona_passaro.id_post = posts.id_post
 				""")
 			r = cursor.fetchall()
 			if len(r) == 0 :
