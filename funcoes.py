@@ -53,7 +53,7 @@ def remove_post(conn, id_post):
 def posts_usuario_ordem_cronologica_reversa(conn, id_usuario):
 	with conn.cursor() as cursor:
 		try:
-			cursor.execute('SELECT texto FROM posts WHERE id_usuario=%s ORDER BY data_post ASC LIMIT by 5', (id_usuario))
+			cursor.execute('SELECT texto FROM posts WHERE id_usuario=%s ORDER BY data_post DESC', (id_usuario))
 			r = cursor.fetchone()
 			return r[0]
 		except pymysql.err.IntegrityError as e:
