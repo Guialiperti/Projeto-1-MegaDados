@@ -236,9 +236,9 @@ def quantidade_aparelho_browser(conn):
 			cursor.execute(
 				"""
 					SELECT
-						browser, aparelho
+						browser, aparelho , COUNT(aparelho)
 					FROM
-						posts
+						usuario_ve_post
 					GROUP BY 
 						browser,aparelho
 				""")
