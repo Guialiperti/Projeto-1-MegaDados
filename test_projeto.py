@@ -232,10 +232,6 @@ class TestProjeto(unittest.TestCase):
         reacao = acha_reacao_post(conn, id_usuario, id_post)
         self.assertEqual('Love', reacao)
 
-        
-
-
-        
 
 def run_sql_script(filename):
     global config
