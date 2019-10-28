@@ -313,7 +313,90 @@ class TestProjeto(unittest.TestCase):
         lista = URL_passaros(conn)
         self.assertIsNotNone(lista)
 
+    def testa_tabela_cruzada(self):
+        conn = self.__class__.connection
 
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        nome2 = 'Nicolas Stegmann'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo2 = 'depois'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        especie_passaro = 'pombo'
+
+        
+
+    def teste_usuarios_referenciam(self):
+        conn = self.__class__.connection
+
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        nome = 'Guilherme Aliperti'
+        nome2 = 'Nicolas Stegmann'
+        nome3 = 'Gabriel Moura'
+        url = 'https://insper.edu.br'
+        visivel = '1'
+        ip = '10.2.3'
+        email = 'guirin@gmail.com'
+        cidade = 'SP'
+        titulo2 = 'depois'
+        titulo3 = 'eita'
+        titulo = 'Passaromaniaco'
+        texto = 'Bla bla bla passaros sao legais'
+        especie_passaro = 'pombo'
+        l_id = []
+
+        adiciona_usuario(conn, nome, email, cidade)
+        id_referenciado = acha_usuario(conn, nome)
+        
+        adiciona_usuario(conn, nome2, email, cidade)
+        id_usu1 = acha_usuario(conn, nome2)
+
+        adiciona_usuario(conn, nome3, email, cidade)
+        id_usu2 = acha_usuario(conn, nome3)
+
+        adiciona_post(conn, titulo, texto, url, visivel, id_usu1)
+        id_post1 = acha_post(conn, titulo2)
+        l_id.append(id_post1)
+        marca_usuario(conn, id_post1, id_referenciado)
+
+
+        adiciona_post(conn, titulo2, texto, url, visivel, id_usu2)
+        id_post2 = acha_post(conn, titulo2)
+        l_id.append(id_post2)
+        marca_usuario(conn, id_post2, id_referenciado)
+
+        l_referenciados = usuarios_que_referenciam(conn, id_referenciado)
+
+        if l_referenciados[0] in l_id:
+            if l_referenciados[1] in l_id:
+                self.assertEqual(1,1)
+        
+        else:
+            self.assertEqual(2,1)
+
+
+        
+
+
+
+
+
+
+    
+
+
+    
+
+        
+
+        
 
 
 
