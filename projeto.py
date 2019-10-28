@@ -40,6 +40,16 @@ def lista_usuarios(conn):
         return usuarios
 
 #Funcoes tabela POST
+def marcacoes(texto): 
+	palavras = texto.split()
+	p = []
+	u = []
+	for word in palavras:
+		if(word[0] == "#"):	
+			p.append(word[1:])
+		if(word[0] == "@"):   
+			u.append(word[1:])
+	return p,u
 
 def adiciona_post(conn, titulo, texto, url, visivel, id_usuario):
     with conn.cursor() as cursor:
@@ -47,6 +57,20 @@ def adiciona_post(conn, titulo, texto, url, visivel, id_usuario):
             cursor.execute('INSERT INTO posts (titulo, texto, url, visivel, id_usuario) VALUES (%s, %s, %s, %s, %s)', (titulo, texto, url, visivel, id_usuario))
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso inserir o post com titulo: {titulo} na tabela post')
+
+def adiciiona_post(conn, titulo, texto, url, visivel, id_usuario):
+	p,u = marcacoes(texto)
+	with conn.cursor() as cursor:
+		try:
+			cursor.execute('INSERT INTO post (titulo, texto, url, visivel, id_usuario) VALUES (%s, %s, %s, %i)', (titulo, texto, url, visivel, id_usuario))
+			cursor.execute('SELECT id_post FROM posts WHERE id_post = LAST_INSERT_ID() LIMIT 1')
+			r = cursor.fetchone()
+			for i in p:
+				marca_passaro(conn,i,r[0])
+			for i in u:
+				marca_usuario(conn, i,r[0])
+		except pymysql.err.IntegrityError as e:
+			raise ValueError(f'Não posso inserir o post com titulo: {titulo} na tabela posts')
 
 def acha_post(conn, titulo):
     with conn.cursor() as cursor:
@@ -93,6 +117,13 @@ def menciona_passaro(conn, id_post, especie_passaro):
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso adicionar a post_menciona_passaro de nome: {especie_passaro} no post de id: {id_post} na tabela')
 
+def marca_passaro(conn, id_post, especie_passaro):
+	with conn.cursor() as cursor:
+		try:
+			cursor.execute('CALL marca_passaro(%s, %s)', (especie_passaro, id_post))
+		except pymysql.err.IntegrityError as e:
+			raise ValueError(f'Não posso marcar o passaro de nome: {especie_passaro} no post de id: {id_post}')
+
 
 #Funcoes da tabela post menciona usuario
 def marca_usuario(conn, id_post, id_usuario):
@@ -102,6 +133,12 @@ def marca_usuario(conn, id_post, id_usuario):
         except pymysql.err.IntegrityError as e:
             raise ValueError(f'Não posso marcar o usuario de id: {id_usuario} no post de id: {id_post} na tabela post_menciona_usuario')
 
+def marca_usuarrio(conn, nome_usuario, id_post):
+	with conn.cursor() as cursor:
+		try:
+			cursor.execute('CALL marca_usuario(%s, %i)', (nome_usuario, id_post))
+		except pymysql.err.IntegrityError as e:
+			raise ValueError(f'Não posso adicionar marcar o usuario de nome: {nome_usuario} no post de id: {id_post}')
 
 #Funcoes da tabela usuario_prefere_passaro
 
